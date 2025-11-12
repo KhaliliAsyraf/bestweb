@@ -17,6 +17,49 @@ class AuthController extends Controller
      * 
      * @param LoginRequest $request
      * @return JsonResponse
+     *
+     * @OA\Post(
+     *     path="/api/login",
+     *     operationId="loginUser",
+     *     tags={"Auth"},
+     *     summary="User login",
+     *     description="Authenticate a user and return a bearer token.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email", "password"},
+     *             @OA\Property(property="email", type="string", format="email", example="test@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="password")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Login success.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Login success."),
+     *             @OA\Property(property="token", type="string", example="<token>")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error (invalid email or password).",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The selected email is invalid."),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="email", type="array",
+     *                     @OA\Items(type="string", example="The selected email is invalid.")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Something when wrong")
+     *         )
+     *     )
+     * )
      */
     public function login(LoginRequest $request): JsonResponse
     {

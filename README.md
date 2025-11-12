@@ -1,6 +1,6 @@
 # Product Management System
 
-> ⚠️ **Important:** Due to a tight schedule, the progress will continue soon. The backend engine is **100% covered**, and the overall project is about **85% complete**.
+> ⚠️ **Important:** Due to a tight schedule, the progress will continue soon. The backend engine is **100% covered**, and the overall project is about **95% complete**.
 
 ---
 
@@ -8,7 +8,7 @@
 
 - **Backend:** Laravel  
 - **Testing:** PHPUnit  
-- **API Docs:** Swagger (to add soon)  
+- **API Docs:** Swagger
 
 ---
 
@@ -20,14 +20,22 @@
 ```bash
 docker-compose up -d --build
 ```
-3. Swagger API endpoints will be added soon.
-4. Authentication:
+
+> ⚠️ Note: Docker has issues running two environments simultaneously. For PHPUnit testing, it is recommended to test locally on your machine. Ensure PHP and project dependencies are set up properly on your local environment, and create your own .env.testing file with APP_ENV=testing to run tests safely without affecting the Docker environment.
+
+3. Authentication:
 - Start with the login endpoint to get the token.
 - Credentials:
     - Email: test@example.com
     - Password: password
-- CLI-friendly login commands may be used later (not included yet due to tight schedule).
-
+- For a developer-friendly approach, a custom Artisan command is ready:
+    ```bash
+    php artisan app:sample-token
+    ```
+4. Swagger Documentation
+- Access Swagger at: http://localhost:8085/api/documentation
+- You can get a token either via the login endpoint in Swagger or the custom Artisan command above.
+- Copy the token and authorize the API using Bearer Token in Swagger UI.
 ---
 
 ## Highlights / Key Features

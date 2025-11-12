@@ -35,6 +35,75 @@ class ProductController extends Controller
      * 
      * @param ProductStoreRequest $request
      * @return JsonResponse
+     *
+     * @OA\Post(
+     *     path="/api/product",
+     *     summary="Create a new product",
+     *     description="Add a new product to the system.",
+     *     tags={"Product"},
+     *     security={{"bearerAuth":{}}},
+     *
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name","category_id","description","price","stock","enabled"},
+     *             @OA\Property(property="name", type="string", example="Nasi Lemak"),
+     *             @OA\Property(property="category_id", type="integer", example=1),
+     *             @OA\Property(property="description", type="string", example="blabla"),
+     *             @OA\Property(property="price", type="number", format="float", example=4.50),
+     *             @OA\Property(property="stock", type="integer", example=2),
+     *             @OA\Property(property="enabled", type="boolean", example=true)
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=201,
+     *         description="Product created successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=12),
+     *                 @OA\Property(property="name", type="string", example="Nasi Lemak"),
+     *                 @OA\Property(property="category_id", type="integer", example=1),
+     *                 @OA\Property(property="description", type="string", example="blabla"),
+     *                 @OA\Property(property="price", type="number", format="float", example=4.50),
+     *                 @OA\Property(property="stock", type="integer", example=2),
+     *                 @OA\Property(property="enabled", type="boolean", example=true),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-11-12T10:23:45Z")
+     *             )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="The selected category id is invalid."),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="category_id",
+     *                     type="array",
+     *                     @OA\Items(type="string", example="The selected category id is invalid.")
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
      */
     public function store(ProductStoreRequest $request): JsonResponse
     {
@@ -80,6 +149,90 @@ class ProductController extends Controller
      * 
      * @param ProductAllRequest $request
      * @return JsonResponse
+     *
+     * @OA\Get(
+     *     path="/api/product",
+     *     summary="Retrieve list of products",
+     *     description="Fetch a paginated list of products. Optionally filter by category name.",
+     *     tags={"Product"},
+     *     security={{"bearerAuth":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="category",
+     *         in="query",
+     *         description="Filter products by category name",
+     *         required=false,
+     *         @OA\Schema(type="string", example="food")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Retrieved products success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Retrieved products success"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="data",
+     *                     type="array",
+     *                     @OA\Items(
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer", example=1),
+     *                         @OA\Property(property="name", type="string", example="Nasi Lemak"),
+     *                         @OA\Property(property="category_id", type="integer", example=1),
+     *                         @OA\Property(property="description", type="string", example="blabla"),
+     *                         @OA\Property(property="price", type="number", format="float", example=4.5),
+     *                         @OA\Property(property="stock", type="integer", example=2),
+     *                         @OA\Property(property="enabled", type="boolean", example=true),
+     *                         @OA\Property(property="created_at", type="string", format="date-time", example="2025-11-12T14:27:47.000000Z"),
+     *                         @OA\Property(property="updated_at", type="string", format="date-time", example="2025-11-12T14:27:47.000000Z"),
+     *                         @OA\Property(
+     *                             property="category",
+     *                             type="object",
+     *                             @OA\Property(property="id", type="integer", example=1),
+     *                             @OA\Property(property="name", type="string", example="food")
+     *                         )
+     *                     )
+     *                 ),
+     *                 @OA\Property(property="path", type="string", example="http://localhost:8085/api/product"),
+     *                 @OA\Property(property="per_page", type="integer", example=10),
+     *                 @OA\Property(property="next_cursor", type="string", nullable=true, example=null),
+     *                 @OA\Property(property="next_page_url", type="string", nullable=true, example=null),
+     *                 @OA\Property(property="prev_cursor", type="string", nullable=true, example=null),
+     *                 @OA\Property(property="prev_page_url", type="string", nullable=true, example=null)
+     *             )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="The selected category is invalid."),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="category",
+     *                     type="array",
+     *                     @OA\Items(type="string", example="The selected category is invalid.")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="errors", type="string", example="Retrieve products encounter error.")
+     *         )
+     *     )
+     * )
      */
     public function index(ProductAllRequest $request): JsonResponse
     {
@@ -106,6 +259,77 @@ class ProductController extends Controller
      * 
      * @param ProductRequest $request
      * @return JsonResponse
+     *
+     * @OA\Get(
+     *     path="/api/product/{id}",
+     *     summary="Retrieve specific product by ID",
+     *     description="Fetch a single product record including its category details.",
+     *     tags={"Product"},
+     *     security={{"bearerAuth":{}}},
+     *
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Product ID",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Retrieved product success",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Retrieved product success"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="Nasi Lemak"),
+     *                 @OA\Property(property="category_id", type="integer", example=1),
+     *                 @OA\Property(property="description", type="string", example="blabla"),
+     *                 @OA\Property(property="price", type="number", format="float", example=4.5),
+     *                 @OA\Property(property="stock", type="integer", example=2),
+     *                 @OA\Property(property="enabled", type="boolean", example=true),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-11-12T14:27:47.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-11-12T14:27:47.000000Z"),
+     *                 @OA\Property(
+     *                     property="category",
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="name", type="string", example="food")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error (invalid ID)",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="The selected id is invalid."),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="id",
+     *                     type="array",
+     *                     @OA\Items(type="string", example="The selected id is invalid.")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="error", type="string", example="Something when wrong")
+     *         )
+     *     )
+     * )
      */
     public function get(ProductRequest $request): JsonResponse
     {
@@ -132,6 +356,71 @@ class ProductController extends Controller
      * 
      * @param ProductUpdateRequest $request
      * @return JsonResponse
+     *
+     * @OA\Put(
+     *     path="/api/product/{id}",
+     *     operationId="updateProduct",
+     *     tags={"Product"},
+     *     summary="Update a specific product",
+     *     description="Update an existing product by its ID",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Product ID",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "category_id", "description", "price", "stock", "enabled"},
+     *             @OA\Property(property="name", type="string", example="Nasi Lemak"),
+     *             @OA\Property(property="category_id", type="integer", example=1),
+     *             @OA\Property(property="description", type="string", example="blabla"),
+     *             @OA\Property(property="price", type="number", format="float", example=4.50),
+     *             @OA\Property(property="stock", type="integer", example=2),
+     *             @OA\Property(property="enabled", type="boolean", example=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Product updated successfully.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Product updated successfully."),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="Nasi Lemaks"),
+     *                 @OA\Property(property="category_id", type="integer", example=1),
+     *                 @OA\Property(property="description", type="string", example="blabla"),
+     *                 @OA\Property(property="price", type="number", format="float", example=4.5),
+     *                 @OA\Property(property="stock", type="integer", example=2),
+     *                 @OA\Property(property="enabled", type="boolean", example=true),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2025-11-12T14:27:47.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2025-11-12T14:38:13.000000Z")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The selected id is invalid."),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="id", type="array",
+     *                     @OA\Items(type="string", example="The selected id is invalid.")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Something when wrong")
+     *         )
+     *     )
+     * )
      */
     public function update(ProductUpdateRequest $request): JsonResponse
     {
@@ -176,6 +465,49 @@ class ProductController extends Controller
      * 
      * @param ProductDeleteRequest $request
      * @return JsonResponse
+     *
+     * @OA\Delete(
+     *     path="/api/product/{id}",
+     *     operationId="deleteProduct",
+     *     tags={"Product"},
+     *     summary="Delete a specific product",
+     *     description="Delete an existing product by its ID",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Product ID",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Product deleted successfully.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Product deleted successfully."),
+     *             @OA\Property(property="data", type="string", nullable=true, example=null)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The selected id is invalid."),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="id", type="array",
+     *                     @OA\Items(type="string", example="The selected id is invalid.")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Something when wrong")
+     *         )
+     *     )
+     * )
      */
     public function delete(ProductDeleteRequest $request): JsonResponse
     {
@@ -205,6 +537,54 @@ class ProductController extends Controller
      * 
      * @param ProductDeleteBulkRequest $request
      * @return JsonResponse
+     *
+     * @OA\Post(
+     *     path="/api/product/delete-bulk",
+     *     operationId="bulkDeleteProduct",
+     *     tags={"Product"},
+     *     summary="Bulk delete products",
+     *     description="Delete multiple products by their IDs",
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"ids"},
+     *             @OA\Property(
+     *                 property="ids",
+     *                 type="array",
+     *                 @OA\Items(type="integer", example=1),
+     *                 example={1, 2}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Product bulk deleted successfully.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Product bulk deleted successfully."),
+     *             @OA\Property(property="data", type="string", nullable=true, example=null)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The selected ids.1 is invalid."),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="ids.1", type="array",
+     *                     @OA\Items(type="string", example="The selected ids.1 is invalid.")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Something when wrong")
+     *         )
+     *     )
+     * )
      */
     public function deleteBulk(ProductDeleteBulkRequest $request): JsonResponse
     {
