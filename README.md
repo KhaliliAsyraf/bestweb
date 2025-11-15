@@ -46,7 +46,7 @@ docker-compose up -d --build
 
 3. Cursor Pagination – Optimized and faster than typical pagination.
 
-4. Cached Data – Provides faster response (feature to be added soon).
+4. Cached Data – Provides faster response.
 
 5. Dependency Injection – Clean, maintainable code.
 
@@ -55,3 +55,5 @@ docker-compose up -d --build
 7. Single Responsibility Pattern – Each class/service has one clear responsibility.
 
 8. Docker – Containerized environment for consistent setup.
+
+9. Uses interface-based service binding with contextual resolution, allowing Laravel to automatically determine the correct service class for each controller.

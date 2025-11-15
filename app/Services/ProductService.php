@@ -3,13 +3,14 @@
 namespace App\Services;
 
 use App\Exports\ProductsExport;
+use App\Interfaces\ServiceInterface;
 use App\Models\Product;
 use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class ProductService
+class ProductService implements ServiceInterface
 {
     /**
      * To store and return new or existing product

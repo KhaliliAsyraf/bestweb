@@ -9,12 +9,10 @@ use App\Http\Requests\Product\ProductDeleteRequest;
 use App\Http\Requests\Product\ProductRequest;
 use App\Http\Requests\Product\ProductStoreRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
-use App\Models\Product;
-use App\Services\ProductService;
+use App\Interfaces\ServiceInterface;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +22,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class ProductController extends Controller
 {
     public function __construct(
-        protected ProductService $productService
+        protected ServiceInterface $productService
     )
     {
         // 

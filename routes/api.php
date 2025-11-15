@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,12 @@ Route::name('api.')
                 Route::get('/download/report', [ProductController::class, 'exportExcel'])
                     ->middleware(['throttle:download'])
                     ->name('export-excel');
+            });
+        
+        Route::prefix('category')
+            ->name('category.')
+            ->group(function () {
+                Route::get('/', [CategoryController::class, 'index'])->name('index');
             });
     });
 
